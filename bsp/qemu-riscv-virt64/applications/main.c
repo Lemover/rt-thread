@@ -15,7 +15,7 @@
 int call_microbench(const char *args);
 int main(void)
 {
-    // rt_kprintf("Hello RISC-V!\n");
+    rt_kprintf("Hello RISC-V!\n");
     call_microbench("ref");
     return 0;
 }

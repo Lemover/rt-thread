@@ -27,7 +27,7 @@ BUILD = ''
 
 if PLATFORM == 'gcc':
     # toolchains
-    PREFIX  = 'riscv64-linux-gnu-'
+    PREFIX  = 'riscv64-unknown-linux-gnu-'
     CC      = PREFIX + 'gcc'
     CXX     = PREFIX + 'g++'
     AS      = PREFIX + 'gcc'

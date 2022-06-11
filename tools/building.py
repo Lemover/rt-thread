@@ -904,6 +904,7 @@ def EndBuilding(target, program = None):
         Env['dist_handle'] = rtconfig.dist_handle
 
     Env.AddPostAction(target, rtconfig.POST_ACTION)
+    Env.AddPostAction(target, rtconfig.DUMP_ACTION)
     # Add addition clean files
     Clean(target, 'cconfig.h')
     Clean(target, 'rtua.py')

@@ -15,7 +15,7 @@
 
 #define UART_DEFAULT_BAUDRATE               115200
 
-#define UART_BASE            (0x10000000L)
+#define UART_BASE            (0xe0000000L)
 
 #define RHR 0    // Receive Holding Register (read mode)
 #define THR 0    // Transmit Holding Register (write mode)
