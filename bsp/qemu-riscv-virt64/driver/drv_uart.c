@@ -17,6 +17,51 @@
 #include "sbi.h"
 #include "interrupt.h"
 
+
+#define XUARTPS_FIFO_OFFSET 0x0000000c
+#define XUARTPS_SR_OFFSET 0x0000000b
+#define SR_TX_FULL  0x10
+#define SR_RX_EMPTY 0x02
+
+volatile uint32_t* xuart = (void *)0xe0000000; //(void *)0x40010000;
+
+void xuart_putchar(uint8_t ch) {
+    volatile uint32_t *tx = xuart + XUARTPS_FIFO_OFFSET;
+      while((*((volatile unsigned char*)(xuart + XUARTPS_SR_OFFSET)) & SR_TX_FULL) != 0); 
+        *tx = ch; 
+}
+
+int xuart_getchar() {
+    if (*((volatile unsigned char*)(xuart + XUARTPS_SR_OFFSET)) & SR_RX_EMPTY) {
+          return -1; 
+            }
+      int32_t ch = xuart[XUARTPS_FIFO_OFFSET];
+        return ch; 
+}
+
+void uart_puts(char *s) {
+      int i = 0;
+          while (s[i]) {
+                    if (s[i]=='\n') xuart_putchar('\r');
+                          xuart_putchar(s[i++]);
+                              }
+}
+
+void uart_putn(int n) {
+      char buf[10], buf_r[10];
+          int offset = 0;
+              do {
+                        buf[offset++] = n % 10 + '0';
+                                n = n / 10;
+                                    } while (n);
+
+                  for (int i = 0; i < offset; ++i)
+                          buf_r[offset-i-1] = buf[i]; buf_r[offset] = 0;
+
+                  uart_puts(buf_r);
+}
+
+
 struct device_uart
 {
     rt_ubase_t  hw_base;
@@ -30,6 +75,8 @@ static int       drv_uart_getc(struct rt_serial_device *serial);
 
 void virt_uart_init(void)
 {
+    uart_puts("In virt_uart_init, use pk puts\n");
+
     //http://byterunner.com/16550.html
     uart_write_reg(IER, 0x00);
 
@@ -85,8 +132,10 @@ static rt_err_t uart_control(struct rt_serial_device *serial, int cmd, void *arg
 
 static int drv_uart_putc(struct rt_serial_device *serial, char c)
 {
-    while ((uart_read_reg(LSR) & LSR_TX_IDLE) == 0);
-    return uart_write_reg(THR, c);
+  xuart_putchar(c);
+  return (int)c;
+//    while ((uart_read_reg(LSR) & LSR_TX_IDLE) == 0);
+//    return uart_write_reg(THR, c);
 }
 
 static int drv_uart_getc(struct rt_serial_device *serial)
@@ -125,6 +174,10 @@ int rt_hw_uart_init(void)
     struct rt_serial_device *serial;
     struct device_uart      *uart;
     struct serial_configure config = RT_SERIAL_CONFIG_DEFAULT;
+
+    uart_puts("In_virt_hw_uart_init,_use_pk_puts\n");
+    uart_puts("space:  \n");
+
     {
         serial  = &serial1;
         uart    = &uart1;
@@ -138,12 +191,17 @@ int rt_hw_uart_init(void)
 
         virt_uart_init();
 
+        uart_puts("After_virt_uart_init\n");
+        uart_puts("space:  \n");
+
         rt_hw_serial_register(serial,
                               "uart",
                               RT_DEVICE_FLAG_STREAM | RT_DEVICE_FLAG_RDWR, // | RT_DEVICE_FLAG_INT_RX,
                               uart);
         // rt_hw_interrupt_install(uart->irqno, rt_hw_uart_isr, serial, "uart");
 
+        uart_puts("After_hw_serial_register\n");
+        uart_puts("space:  \n");
         // rt_hw_interrupt_umask(uart->irqno);
     }
 
