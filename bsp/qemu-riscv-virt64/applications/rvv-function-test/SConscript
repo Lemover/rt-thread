@@ -1,0 +1,10 @@
+Import('RTT_ROOT')
+import os
+from building import *
+
+cwd = GetCurrentDir()
+group = []
+print(os.path.join(cwd, "src/SConscript"))
+group = group + SConscript(os.path.join(cwd, "src/SConscript"))
+
+Return('group')

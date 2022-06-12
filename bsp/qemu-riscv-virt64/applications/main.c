@@ -12,10 +12,14 @@
 #include <rthw.h>
 #include <stdio.h>
 #include <string.h>
+
 int call_microbench(const char *args);
+void call_rvv_function_test();
+
 int main(void)
 {
     rt_kprintf("Hello RISC-V!\n");
     call_microbench("ref");
+    call_rvv_function_test();
     return 0;
 }

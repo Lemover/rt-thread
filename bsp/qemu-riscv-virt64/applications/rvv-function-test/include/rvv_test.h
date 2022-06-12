@@ -1,0 +1,2 @@
+extern char _rvv_function_test_start;
+extern char _rvv_function_test_end;

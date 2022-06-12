@@ -1,0 +1,21 @@
+# for module compiling
+import os
+from building import *
+
+cwd  = GetCurrentDir()
+src_dir = cwd
+
+list = os.listdir(src_dir)
+
+src = Glob('*.c')
+CPPPATH = [cwd + '/../include']
+
+for item in list:
+    item_path = os.path.join(cwd, item)
+    if os.path.isdir(item_path):
+        src = src + Glob(item_path + '/*.c')
+        src = src + Glob(item_path + '/*.cc')
+        src = src + Glob(item_path + '/*.S')
+
+group =  DefineGroup('rvv_function_test', src, depend = [''], CPPPATH = CPPPATH, ASFLAG = '')
+Return('group')

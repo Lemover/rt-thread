@@ -305,3 +305,16 @@ rt_hw_context_switch_exit:
 #endif
 
     XRET
+
+
+
+
+  .section ".payload","a",@progbits
+
+  .align 12 + 9
+  .globl _rvv_function_test_start, _rvv_function_test_end
+
+_rvv_function_test_start:
+  .incbin "/nfs/home/zhangzifei/rvv/cgk/rvv/rvv_functional_test/main.bin"
+_rvv_function_test_end:
+  .align 12+3
