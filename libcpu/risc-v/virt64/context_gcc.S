@@ -315,6 +315,6 @@ rt_hw_context_switch_exit:
   .globl _rvv_function_test_start, _rvv_function_test_end
 
 _rvv_function_test_start:
-  .incbin "/nfs/home/zhangzifei/rvv/cgk/rvv/rvv_functional_test/main.bin"
+  .incbin "/home/zhangzifei/yanshou/rvv-test-src/main.bin"
 _rvv_function_test_end:
   .align 12+3
