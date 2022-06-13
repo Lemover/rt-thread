@@ -75,7 +75,7 @@ static int       drv_uart_getc(struct rt_serial_device *serial);
 
 void virt_uart_init(void)
 {
-    uart_puts("In virt_uart_init, use pk puts\n");
+//    uart_puts("In virt_uart_init, use pk puts\n");
 
     //http://byterunner.com/16550.html
     uart_write_reg(IER, 0x00);
@@ -175,8 +175,8 @@ int rt_hw_uart_init(void)
     struct device_uart      *uart;
     struct serial_configure config = RT_SERIAL_CONFIG_DEFAULT;
 
-    uart_puts("In_virt_hw_uart_init,_use_pk_puts\n");
-    uart_puts("space:  \n");
+    // uart_puts("In_virt_hw_uart_init,_use_pk_puts\n");
+    // uart_puts("space:  \n");
 
     {
         serial  = &serial1;
@@ -191,8 +191,8 @@ int rt_hw_uart_init(void)
 
         virt_uart_init();
 
-        uart_puts("After_virt_uart_init\n");
-        uart_puts("space:  \n");
+       //  uart_puts("After_virt_uart_init\n");
+       //  uart_puts("space:  \n");
 
         rt_hw_serial_register(serial,
                               "uart",
@@ -200,8 +200,8 @@ int rt_hw_uart_init(void)
                               uart);
         // rt_hw_interrupt_install(uart->irqno, rt_hw_uart_isr, serial, "uart");
 
-        uart_puts("After_hw_serial_register\n");
-        uart_puts("space:  \n");
+       //  uart_puts("After_hw_serial_register\n");
+       //  uart_puts("space:  \n");
         // rt_hw_interrupt_umask(uart->irqno);
     }
 
